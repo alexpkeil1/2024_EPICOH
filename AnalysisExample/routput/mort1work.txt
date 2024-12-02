@@ -1,0 +1,14 @@
+Call:
+coxph(formula = Surv(agein, age, d1) ~ atwork + cumatworkl + 
+    cxl + wagestatus + male + year, data = sim_cohort)
+
+                coef exp(coef)  se(coef)      z       p
+atwork     -0.118862  0.887930  0.211774 -0.561 0.57461
+cumatworkl -0.007664  0.992365  0.014809 -0.518 0.60479
+cxl         0.019120  1.019304  0.006913  2.766 0.00568
+wagestatus  0.922850  2.516451  0.104748  8.810 < 2e-16
+male        0.827417  2.287403  0.100643  8.221 < 2e-16
+year       -0.001779  0.998222  0.006073 -0.293 0.76953
+
+Likelihood ratio test=285  on 6 df, p=< 2.2e-16
+n= 458152, number of events= 601 

@@ -1,0 +1,4 @@
+
+    ttr = coxph(Surv(agein, age, d1)~limit, data=filter(combined_wtd_data, ipw>0), 
+              id=cloneid, weight=ipw, cluster=id)
+      

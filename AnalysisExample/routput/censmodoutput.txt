@@ -1,0 +1,57 @@
+
+Call:
+glm(formula = cens ~ year + rcspline.eval(year, knots = yearkn0) + 
+    age + rcspline.eval(age, knots = agekn0) + wagestatus + male + 
+    race, family = binomial(), data = cens_data, weights = conf_weight)
+
+Coefficients:
+                                       Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                           -43.36103   78.41895  -0.553    0.580    
+year                                    0.02230    0.04017   0.555    0.579    
+rcspline.eval(year, knots = yearkn0)1  -0.12660    0.21288  -0.595    0.552    
+rcspline.eval(year, knots = yearkn0)2   0.26791    0.42970   0.623    0.533    
+age                                    -0.01440    0.01886  -0.763    0.445    
+rcspline.eval(age, knots = agekn0)1     0.02470    0.05645   0.438    0.662    
+rcspline.eval(age, knots = agekn0)2    -0.02952    0.18239  -0.162    0.871    
+wagestatus                              0.65122    0.05185  12.560   <2e-16 ***
+male                                    1.84039    0.05456  33.731   <2e-16 ***
+raceW                                  -0.01157    0.05628  -0.206    0.837    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 11629  on 9999  degrees of freedom
+Residual deviance: 10112  on 9990  degrees of freedom
+AIC: 10132
+
+Number of Fisher Scoring iterations: 4
+
+
+Call:
+glm(formula = cens ~ cxl + cumatworkl + age + rcspline.eval(age, 
+    knots = agekn) + wagestatus + male + race, family = binomial(), 
+    data = cens_data, weights = fu_weight)
+
+Coefficients:
+                                   Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                         0.50001    0.69478   0.720    0.472    
+cxl                                 0.06639    0.13635   0.487    0.626    
+cumatworkl                         -0.08280    0.09885  -0.838    0.402    
+age                                -0.01237    0.02994  -0.413    0.680    
+rcspline.eval(age, knots = agekn)1  0.03260    0.08513   0.383    0.702    
+rcspline.eval(age, knots = agekn)2 -0.09889    0.26686  -0.371    0.711    
+wagestatus                          0.45830    0.07961   5.757 8.58e-09 ***
+male                                2.12920    0.17395  12.240  < 2e-16 ***
+raceW                              -0.01126    0.08391  -0.134    0.893    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 4676.4  on 3609  degrees of freedom
+Residual deviance: 4382.0  on 3601  degrees of freedom
+AIC: 4400
+
+Number of Fisher Scoring iterations: 5
+

@@ -1,0 +1,16 @@
+            Variable    N Pct Mean    SD
+                 Age            28  6.35
+       Calendar year          1954 2.915
+               Waged 7039  70           
+            Salaried 2961  30           
+            Gender F 5052  51           
+            Gender M 4948  49           
+          White race 7476  75           
+      Non-white race 2524  25           
+  Years of follow-up          26.4  16.9
+ Average X (at work)          1.89 0.797
+        Cumulative X          17.2  15.3
+        Years worked          9.07  7.67
+                  D1  601   6           
+                  D2 7931  79           
+            Survived 1468  15           

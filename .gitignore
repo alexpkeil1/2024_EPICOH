@@ -52,7 +52,9 @@ rsconnect/
 bib
 private*
 talk/fig
+*_hwsb-blx.bib
 *_hwsb.aux
+*_hwsb.bbl
 *_hwsb.blg
 *_hwsb.log
 *_hwsb.tex

@@ -1,0 +1,13 @@
+Call:
+coxph(formula = Surv(agein, age, leftwork) ~ cxl + wagestatus + 
+    male + year, data = filter(sim_cohort, atwork == 1 | leftwork == 
+    1))
+
+                 coef  exp(coef)   se(coef)      z      p
+cxl         0.0141371  1.0142375  0.0014321  9.872 <2e-16
+wagestatus -0.0445361  0.9564411  0.0223938 -1.989 0.0467
+male       -0.0057580  0.9942586  0.0220583 -0.261 0.7941
+year       -0.0007632  0.9992371  0.0027040 -0.282 0.7778
+
+Likelihood ratio test=220.8  on 4 df, p=< 2.2e-16
+n= 115616, number of events= 9589 

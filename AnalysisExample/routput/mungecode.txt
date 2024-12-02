@@ -1,0 +1,23 @@
+sim_cohort <- sim_cohort %>%
+  group_by(id) %>%
+  mutate(
+    one = 1,
+    time = cumsum(one),
+    timein = time-1,
+    agein = age-1,
+    xl = lag(x, default=0),
+    cxl = lag(cumx, default=0),
+    cumatwork = cumsum(atwork),
+    cumatworkl = lag(cumatwork, default=0),
+    atworkl = lag(atwork, default=0),  
+    leftwork = as.numeric(atworkl==1 & atwork == 0),
+    cxl2 = lag(cxl, default=0),  
+  ) %>%
+  select(-one) %>%
+  ungroup()
+sim_cohort <- sim_cohort %>%
+  group_by(id) %>%
+  mutate(
+  male = as.numeric(gender == 'M')
+  ) %>%
+  ungroup()

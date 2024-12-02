@@ -1,0 +1,10 @@
+sim_cohort$exposed = 0
+cens_data$exposed = 1
+sim_cohort$ipw = 1
+sim_cohort$cloneid = paste0("cloneobs_", sim_cohort$id)
+combined_data <- bind_rows(sim_cohort, cens_data)
+
+coxph(Surv(agein, age, d1)~exposed, 
+     data=filter(combined_data, ipw != 0), weight=ipw, 
+     id=cloneid, cluster=id) %>% 
+      summary %>% print

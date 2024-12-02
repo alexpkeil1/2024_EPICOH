@@ -1,0 +1,17 @@
+cens_data$dconf = cens_data$conf_weight*as.numeric(predict(confdmod, type="response"))
+cens_data$dcens = cens_data$fu_weight*as.numeric(predict(censdmod, type="response")) 
+cens_data$nconf = cens_data$conf_weight*as.numeric(predict(confnmod, type="response"))
+cens_data$ncens = cens_data$fu_weight*as.numeric(predict(censnmod, type="response"))   
+cens_data <- cens_data %>% 
+  mutate(
+    wtcontr = case_when(
+      ((fobs____ == 1) & (atwork==1)) ~ (1-cens)*(1-nconf)/(1-dconf),
+      ((fobs____ == 0) & (atwork==1)) ~ (1-cens)*(1-ncens)/(1-dcens),
+      .default=1
+    )
+  ) %>%
+  group_by(cloneid) %>%
+  mutate(
+    ipw = cumprod(wtcontr),
+    ipwt = pmin(10, cumprod(wtcontr)) # sometimes truncated weights are advocated
+  )

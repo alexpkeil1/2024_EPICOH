@@ -1,0 +1,9 @@
+# A tibble: 5 × 15
+# Groups:   cloneid [1]
+  cloneid           x limit wagestatus  male race    age  year cumatwork  cumx wtcontr dconf dcens   ipw  ipwt
+  <chr>         <dbl> <dbl>      <int> <dbl> <chr> <int> <int>     <int> <dbl>   <dbl> <dbl> <dbl> <dbl> <dbl>
+1 clone2.0_1206 0.997     1          0     1 W        33  1955         1 0.997    1.71 0.841 0      1.71  1.71
+2 clone2.0_1206 0.952     1          0     1 W        34  1956         2 1.95     3.90 0     0.911  6.67  6.67
+3 clone2.0_1206 0.815     1          0     1 W        35  1957         3 2.76     3.85 0     0.909 25.7  10   
+4 clone2.0_1206 0.888     1          0     1 W        36  1958         4 3.65     3.76 0     0.906 96.6  10   
+5 clone2.0_1206 2.40      1          0     1 W        37  1959         5 6.06     0    0     0.904  0     0   

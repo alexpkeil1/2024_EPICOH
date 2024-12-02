@@ -1,0 +1,11 @@
+
+cens_data <- clones %>%
+  group_by(cloneid) %>%
+  mutate(
+    cens = pmin(1,cumsum(x > limit)),
+    drop = pmin(2, cumsum(cens))
+  ) %>%
+  ungroup() %>%
+  filter(
+    drop < 2
+  )
