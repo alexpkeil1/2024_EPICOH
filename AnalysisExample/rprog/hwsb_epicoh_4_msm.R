@@ -14,7 +14,7 @@ library(survival)
 # maximum annual exposures for each individual
 maxexposures = as.numeric(tapply(sim_cohort$x, sim_cohort$id, max))
 
-limits = quantile(maxexposures, seq(.20,0.80,length.out=30)) # 30 limits all within the range of observed lifetime max exposures
+limits = quantile(maxexposures[maxexposures>0], seq(.20,0.90,length.out=30)) # 30 limits all within the range of observed lifetime max exposures
 
 # do all analysis: note this is wrapped in a function to facilitate bootstrapping, if needed
 doipw = function(sim_cohort, limits){
@@ -75,8 +75,8 @@ doipw = function(sim_cohort, limits){
     yearkn = attr(rcspline.eval(filter(tempdat, fu_weight==1)$year, nk = 4), "knots")
     #
     if(sum(tempdat[tempdat$conf_weight==1,"cens"]) > 10){
-      summary(confnmod <- glm(cens ~ 1 , data = tempdat, weight=conf_weight, family=binomial()))
-      summary(confdmod <- glm(cens ~ year + rcspline.eval(year, knots=yearkn0) + age + rcspline.eval(age, knots=agekn) + wagestatus + male + race, data = tempdat, weight=conf_weight, family=binomial()))
+      summary(confnmod <- glm(cens ~ age + rcspline.eval(age, knots=agekn0) , data = tempdat, weight=conf_weight, family=binomial()))
+      summary(confdmod <- glm(cens ~ age + rcspline.eval(age, knots=agekn0) + wagestatus + male + race, data = tempdat, weight=conf_weight, family=binomial()))
       # need to use base R operations here
       # only get non-zero predictions if "conf_weight" == 1 (eligible to be "censored" at baseline)
       cens_data[limidx,"nconf"] = tempdat$conf_weight*as.numeric(predict(confnmod, type="response"))
@@ -86,7 +86,7 @@ doipw = function(sim_cohort, limits){
       cens_data[limidx,"dconf"] = 0
     }
     if(sum(tempdat[tempdat$fu_weight==1,"cens"]) > 1){
-      summary(censnmod <- glm(cens ~ 1, data = tempdat, weight=fu_weight, family=binomial()))
+      summary(censnmod <- glm(cens ~ age + rcspline.eval(age, knots=agekn), data = tempdat, weight=fu_weight, family=binomial()))
       summary(censdmod <- glm(cens ~  mxl + cumatworkl + age + rcspline.eval(age, knots=agekn) + wagestatus + male + race, data = tempdat, weight=fu_weight, family=binomial()))
       # only get non-zero predictions if "fu_weight" == 1 (eligible to be censored during follow-up)
       cens_data[limidx,"ncens"] = tempdat$fu_weight*as.numeric(predict(censnmod, type="response")) 
@@ -136,30 +136,38 @@ doipw = function(sim_cohort, limits){
   combined_wtd_data$event <- factor(combined_wtd_data$d2 + combined_wtd_data$d1*2, 0:2, labels=c("censor", "d_other", "d_lc"))
   
   # marginal structural policy Cox model: effect of incremental change in the limit
-  ttr = coxph(Surv(agein, age, d1)~limit, data=filter(combined_wtd_data, ipw>0), 
-              id=cloneid, weight=ipw, cluster=id)
+  ttr1 = coxph(Surv(agein, age, d1)~limit, data=filter(combined_wtd_data, ipw>0), 
+              id=cloneid, weight=ipw, cluster=id, x=FALSE, y=FALSE)
+  ttr2 = coxph(Surv(agein, age, d2)~limit, data=filter(combined_wtd_data, ipw>0), 
+              id=cloneid, weight=ipw, cluster=id, x=FALSE, y=FALSE)
   cat('
     ttr = coxph(Surv(agein, age, d1)~limit, data=filter(combined_wtd_data, ipw>0), 
               id=cloneid, weight=ipw, cluster=id)
       ', file = "routput/mscoxmodelcode.txt")
   #source("routput/mscoxmodelcode.txt") # does not work within a function
-  list(msmr=ttr, dx=wtdx)
+  list(msmr1=ttr1, msmr2=ttr2, dx=wtdx)
 }
 
-
+# 4) fit the MSM
+# Note: this is a big model: on my computer I have to increase the "vector memory limit" for the robust variance estimator
+# mem.maxVSize(vsize = 32768)
 msm_estimates = doipw(sim_cohort, limits)
 # check diagnostics
 msm_estimates$dx
 
 # ln-HR: effect of one unit change in the exposure limit (Marginal structural policy model)
-ttr = msm_estimates$msmr
-summary(ttr)
+ttr1 = msm_estimates$msmr1
+summary(ttr1)
 
+ttr2 = msm_estimates$msmr2
+summary(ttr2)
 
 # compare with standard approach
-std_hr1 <- coxph(Surv(agein, age, d1)~cxl + year+rcspline.eval(year, knots=yearkn) + male + race + wagestatus, data=sim_cohort)
+std_hr1 <- coxph(Surv(agein, age, d1)~cxl + male + race + wagestatus, data=sim_cohort)
 summary(std_hr1)
 
+std_hr2 <- coxph(Surv(agein, age, d2)~cxl + male + race + wagestatus, data=sim_cohort)
+summary(std_hr2)
 
 ######### BOOTSTRAPPING #########
 # We can optionally do bootstrapping for confidence intervals, which will generally be better

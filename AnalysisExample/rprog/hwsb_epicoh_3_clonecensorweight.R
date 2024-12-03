@@ -14,7 +14,7 @@ sink("routput/clonecode.txt", split=FALSE)
 cat('
 clones <- sim_cohort %>%
   mutate(
-    limit = as.numeric(1.0),
+    limit = as.numeric(2.0),
     cloneid = paste0("clone2.0_", id)
   )')
 sink()
@@ -38,6 +38,21 @@ cens_data <- clones %>%
 ')
 sink()
 source("routput/censcode.txt")
+
+# 2b) Checking for potential positivity issues by age
+#plot(density(filter(cens_data, cens==1 & atwork==1)$age), col="red", main="Age of active workers", xlab="Age", ylab="Kernel Density")
+
+pdf("routput/workingyears_censored_by_age.pdf", width=5, height=4)
+plot(density(filter(cens_data, cens==0 & atwork==1)$age), col="black", main="Age of active work", xlab="Age", ylab="Kernel Density", lwd=2)
+lines(density(filter(sim_cohort, atwork==1)$age), col="red", lwd=2)
+legend("topright", legend=c("Uncensored (limit=2)", "Cohort"), col=c("black", "red"), lty=1, lwd=2)
+dev.off()
+
+# also check by year
+plot(density(filter(cens_data, cens==0 & atwork==1)$year), col="black", main="Year of active work", xlab="Year", ylab="Kernel Density", lwd=2)
+lines(density(filter(sim_cohort, atwork==1)$year), col="red", lwd=2)
+legend("topright", legend=c("Uncensored (limit=2)", "Cohort"), col=c("black", "red"), lty=1, lwd=2)
+
 
 # 3) create 1/0 weights to use for confounding/censoring during follow-up (alternative is to create new datasets with some observations dropped
 #  note: these are not the inverse probability of censoring weights that will be used later
@@ -70,27 +85,27 @@ agekn = attr(rcspline.eval(filter(cens_data, time>1 & atwork == 1)$age, nk = 4),
 yearkn = attr(rcspline.eval(filter(cens_data, time>1 & atwork == 1)$year, nk = 4), "knots")
 cxkn = attr(rcspline.eval(filter(cens_data, time>1 & atwork == 1)$cxl, nk = 4), "knots")
 clkn = attr(rcspline.eval(filter(cens_data, time>1 & atwork == 1)$cumatworkl, nk = 4), "knots")
+cens_data$mxl = cens_data$cxl / (cens_data$cumatworkl + as.numeric(cens_data$time==1))
 
 # fit models
 sink("routput/censmodcode.txt", split=FALSE)
 cat('# "censored at baseline" model 
 confdmod <- glm(cens~ 
-  year + rcspline.eval(year, knots=yearkn0) + 
   age + rcspline.eval(age, knots=agekn0) + 
   wagestatus + male + race, 
   data = cens_data, weight=conf_weight, family=binomial())
 
 # "censored during follow-up" model 
-censdmod <- glm(cens~ cxl + cumatworkl + 
+censdmod <- glm(cens~ mxl + cumatworkl + 
   age + rcspline.eval(age, knots=agekn) + 
   wagestatus + male + race , data = cens_data, weight=fu_weight, 
   family=binomial())
 ')
 sink()
 # numerator for stabilizing weight
-confnmod <- glm(cens~rcspline.eval(age, knots=agekn0) , data = cens_data, weight=conf_weight, family=binomial())
+confnmod <- glm(cens~ age + rcspline.eval(age, knots=agekn0) , data = cens_data, weight=conf_weight, family=binomial())
 # numerator for stabilizing weight
-censnmod <- glm(cens ~ rcspline.eval(age, knots=agekn), data = cens_data, weight=fu_weight, family=binomial())
+censnmod <- glm(cens ~ age + rcspline.eval(age, knots=agekn), data = cens_data, weight=fu_weight, family=binomial())
 
 
 sink("routput/censmodoutput.txt", split=TRUE)

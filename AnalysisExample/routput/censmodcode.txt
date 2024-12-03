@@ -1,12 +1,11 @@
 # "censored at baseline" model 
 confdmod <- glm(cens~ 
-  year + rcspline.eval(year, knots=yearkn0) + 
   age + rcspline.eval(age, knots=agekn0) + 
   wagestatus + male + race, 
   data = cens_data, weight=conf_weight, family=binomial())
 
 # "censored during follow-up" model 
-censdmod <- glm(cens~ cxl + cumatworkl + 
+censdmod <- glm(cens~ mxl + cumatworkl + 
   age + rcspline.eval(age, knots=agekn) + 
   wagestatus + male + race , data = cens_data, weight=fu_weight, 
   family=binomial())

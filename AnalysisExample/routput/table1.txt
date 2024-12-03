@@ -1,16 +1,17 @@
-            Variable    N Pct Mean    SD
-                 Age            28  6.35
-       Calendar year          1954 2.915
-               Waged 7039  70           
-            Salaried 2961  30           
-            Gender F 5052  51           
-            Gender M 4948  49           
-          White race 7476  75           
-      Non-white race 2524  25           
-  Years of follow-up          26.4  16.9
- Average X (at work)          1.89 0.797
-        Cumulative X          17.2  15.3
-        Years worked          9.07  7.67
-                  D1  601   6           
-                  D2 7931  79           
-            Survived 1468  15           
+            Variable    N Pct  Mean    SD
+                 Age             23  3.48
+       Calendar year           1954 2.915
+               Waged 7039  70            
+            Salaried 2961  30            
+            Gender F 5052  51            
+            Gender M 4948  49            
+          White race 7476  75            
+      Non-white race 2524  25            
+ Never exposed (X=0) 2950  30            
+  Years of follow-up           45.9  13.1
+ Average X (at work)          0.931 0.656
+        Cumulative X           20.8  21.9
+        Years worked           23.4  15.6
+                  D1  727 7.3            
+                  D2 5090  51            
+            Survived 4183  42            

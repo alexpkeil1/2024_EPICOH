@@ -1,6 +1,6 @@
 
 clones <- sim_cohort %>%
   mutate(
-    limit = as.numeric(1.0),
+    limit = as.numeric(2.0),
     cloneid = paste0("clone2.0_", id)
   )

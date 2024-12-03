@@ -55,7 +55,7 @@ enddat <- sim_cohort %>%
 meansd <- function(x, digits=3) c(Mean=as.character(signif(mean(x),digits)), SD=as.character(signif(sd(x), digits)))
 sumprop <- function(x, digits=2) c(N=as.character(sum(x)), Pct=as.character(signif(100*mean(x), digits)))
 means = as.data.frame(with(bldat, rbind("Age"=meansd(agein), "Calendar year"=meansd(year-1, digits=4))))
-means2 = as.data.frame(with(enddat, rbind(as.data.frame(with(sim_cohort, 
+means2 = as.data.frame(with(enddat, rbind(as.data.frame(with(enddat, 
                                                              rbind(
                                                                "Years of follow-up"=meansd(time),
                                                                "Average X (at work)"=meansd(cumx/cumatwork), "Cumulative X"=meansd(cumx),
@@ -63,7 +63,7 @@ means2 = as.data.frame(with(enddat, rbind(as.data.frame(with(sim_cohort,
                                                              ))))))
 props =  as.data.frame(with(bldat, rbind(
   "Waged"=sumprop(wagestatus==1), "Salaried"=sumprop(wagestatus==0),
-  "Gender F"=sumprop(male==0), "Gender M"=sumprop(male==1), "White race"=sumprop(race=="W"), "Non-white race"=sumprop(race=="N")
+  "Gender F"=sumprop(male==0), "Gender M"=sumprop(male==1), "White race"=sumprop(race=="W"), "Non-white race"=sumprop(race=="N"), "Never exposed (X=0)"=sumprop(x==0)
 )))
 props2 =  as.data.frame(with(enddat, rbind("D1"=sumprop(d1), "D2"=sumprop(d2), "Survived"=sumprop(1-d1-d2))))
 means$Variable = rownames(means)

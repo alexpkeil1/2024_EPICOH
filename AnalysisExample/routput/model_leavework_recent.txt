@@ -3,12 +3,12 @@ coxph(formula = Surv(agein, age, leftwork) ~ xl + cxl2 + wagestatus +
     male + year, data = filter(sim_cohort, atwork == 1 | leftwork == 
     1))
 
-                coef exp(coef)  se(coef)      z        p
-xl          0.071436  1.074049  0.006276 11.383  < 2e-16
-cxl2        0.011064  1.011125  0.001480  7.476 7.65e-14
-wagestatus -0.048541  0.952619  0.022392 -2.168   0.0302
-male       -0.020670  0.979542  0.022081 -0.936   0.3492
-year        0.002456  1.002459  0.002728  0.900   0.3680
+                 coef  exp(coef)   se(coef)      z        p
+xl          0.1132628  1.1199262  0.0210034  5.393 6.95e-08
+cxl2        0.0098854  1.0099344  0.0008869 11.146  < 2e-16
+wagestatus -0.0183339  0.9818331  0.0230791 -0.794    0.427
+male        0.0042062  1.0042151  0.0220344  0.191    0.849
+year       -0.0024602  0.9975428  0.0024549 -1.002    0.316
 
-Likelihood ratio test=298.4  on 5 df, p=< 2.2e-16
-n= 115616, number of events= 9589 
+Likelihood ratio test=468.6  on 5 df, p=< 2.2e-16
+n= 243167, number of events= 8778 
