@@ -178,3 +178,6 @@ summary(std_hr2)
 # 3. Repeat 1 and 2 200+ times, recording effect estimate for each sample
 # 4. Bootstrap standard error is the standard deviation of the effect estimates across the 200+ bootstrap samples
 
+while(sink.number()>0){
+  sink(NULL)
+}
